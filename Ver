@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrisanthos Lymperopoulos</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+      .pub-title {
+        font-size:14px;
+        font-weight:700;
+        line-height:1.45;
+        margin:0 0 6px;
+        color:#ffffff; /* Τίτλος λευκός */
+      }
+
+      .pub-authors {
+        font-size:14px;
+        line-height:1.45;
+        margin:0 0 6px;
+        color:#d1d5db; /* Συγγραφείς γκρι */
+      }
+
+      .pub-meta {
+        font-size:12px;
+        color:#94a3b8;
+        line-height:1.45;
+        margin:0;
+      }
+
+      /* Διακριτικός διαχωρισμός μεταξύ entries */
+      .pub-entry + .pub-entry {
+        padding-top:11px;
+        border-top:1px dashed #e0ebeb;
+        margin-top:11px;
+        border-color:#94a3b8;
+      }
+
+      :root {
+        --bg:#0f172a;
+        --panel:#111827cc;
+        --card:#0b1324cc;
+        --border:#199189;
+        --text:#e5e7eb;
+        --muted:#94a3b8;
+        --accent:#38bdf8;
+        --accent-ink:#082f49;
+        --border-bright:#22c6ba;
+        --radius:18px;
+        --sidebar:300px;   /* # πλάτος αριστερής στήλης */
+        --gap:22px;        /* # κενό ανάμεσα στις στήλες */
+        --maxw:1300px;     /* # μέγιστο πλάτος σελίδας */
+        --neon:#00ffff;
+        --main-max:1000px; /* # μέγιστο πλάτος δεξιάς στήλης (modules) */
+      }
+
+      :root{
+          /* tweak these if you want */
+          --wallpaper-url: url("Photos/bg-ocean.jpg"); /* path to your image */
+          --wallpaper-dim: .55;   /* 0 = no darkening, 0.7 = darker */
+        }
+        html, body { background:#0b1220; } /* fallback color */
+
+        body::before{
+        content:"";
+        position:fixed;
+        inset:0;
+        z-index:-2;                 /* always behind everything */
+        pointer-events:none;
+
+        /* dark overlay first, image second */
+        background:
+          linear-gradient(to bottom,
+            rgba(2,6,23,var(--wallpaper-dim)),
+            rgba(2,6,23, calc(var(--wallpaper-dim) + .25))
+          ),
+          var(--wallpaper-url) center / cover no-repeat;
+
+        /* gentle “minus light” and slight punch */
+        filter: brightness(.75) contrast(1.05) saturate(.92);
+      }
+
+      /* Optional: slightly more transparent panels with a bit of glassy blur */
+      :root{
+        /* make your panels/cards a touch more see-through */
+        --panel: rgba(17,24,39,.78);
+        --card:  rgba(11,19,36,.78);
+      }
+      aside, section, .card{
+        backdrop-filter: blur(2px); /* nice on modern browsers; ignored elsewhere */
+      }
+
+      * { box-sizing:border-box; }
+
+      html, body { height:100%; }
+
+      body {
+        margin:0;
+        font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+        background:linear-gradient(180deg,#0b1220,#0f172a 30%, #0a0f1c 100%);
+        color:var(--text);
+        line-height:1.65;
+      }
+
+      html {
+        scroll-behavior:smooth;
+      }
+
+      .page {
+        max-width:var(--maxw);
+        margin:0 auto;
+        padding:4px 26px 48px;
+      }
+  
+      .layout {
+      display:grid;
+      grid-template-columns:minmax(250px, var(--sidebar)) minmax(0, var(--main-max)); /* # αριστερή και δεξιά στήλη */
+      gap:var(--gap);
+      padding-top: 12px;    
+      }
+
+      aside{
+      position: sticky;
+      top: 0;                   /* κολλάει στην κορυφή του grid (που έχει 12px padding) */
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      }
+
+     aside, main { min-width: 0; }
+     aside footer{
+      margin-top: auto;       /* να μένει στο τέλος του sidebar */
+      margin-bottom: 14px;    /* σήκωσέ το όσο θες (π.χ. 14–24px) */
+    }
+      *, *::before, *::after { box-sizing: border-box; }
+    
+
+      /* === Contact: μία στήλη, χωρίς ξεχειλώματα === */
+      aside .contact { display:grid; gap:5px; }
+      aside .contact a {
+        max-width:100%;
+        min-width:0;
+        white-space:normal;
+        overflow-wrap:anywhere;
+        word-break:break-word;
+       }
+
+      .name {
+        font-size:28px;
+        font-weight:790;
+        margin:0px 0px 10px;
+        line-height:2rem;
+        letter-spacing:1px;
+       }
+
+      .role {
+        color:var(--muted);
+        margin:0px 0 18px;
+       }
+
+        .block { margin:10px 0; }
+
+        .block h3 {
+          margin:10px 0 5px;
+          font-size:13px;
+          letter-spacing:1px;
+          color:var(--muted);
+          text-transform:uppercase;
+          font-weight:750;
+        }
+
+        .block:first-of-type { margin-top:-0.75rem; }
+
+        .contact {
+          display:grid;
+          gap:5px;
+          margin:5px 0px 0px -2px;
+        }
+
+      .contact a {
+        display:flex;
+        align-items:center;
+        gap:1.25rem;
+        text-decoration:none;
+        color:var(--neon);
+        padding:7px 10px;
+        border:2px solid var(--border);
+        background:var(--card);
+        border-radius:10px;
+        font-size:14px;
+        font-weight:600;
+        letter-spacing:0.65px;
+        transition:all 0.2s ease;
+      }
+
+      .contact a:hover {
+        border-color:#334155;
+        background:rgba(14,24,45,.85);
+        transform:translateY(-1px);
+      }
+
+      .muted { color:var(--muted); }
+
+      .icon {
+        width:21px;
+        height:21px;
+        flex:0 0 22px;
+        opacity:.975;
+      }
+
+      main {
+        display:grid;
+        gap:var(--gap);
+      }
+
+      section {
+        background:var(--panel);
+        border:1px solid var(--border);
+        border-radius:var(--radius);
+        padding:22px;
+      }
+
+      h2 {
+        margin:0 0 10px;
+        font-size:22px;
+      }
+
+      p { margin:8px 0; }
+
+      .grid {
+        display:grid;
+        gap:16px;
+        grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+        margin-top:8px;
+      }
+
+      .card {
+        background:var(--card);
+        border:1px solid var(--border);
+        border-radius:14px;
+        padding:16px;
+      }
+
+      .card h3 {
+        margin:0 0 6px;
+        font-size:18px;
+       }
+
+       /* ===== Quick Navigation ONLY ===== */
+      aside .block .toplinks{
+        display: flex;
+        flex-wrap: wrap;       /* τα About/Education κτλ. τυλίγονται σωστά */
+        column-gap: 10px;
+        row-gap: 8px;
+      }
+
+      /* Κάθε chip-group να πιάνει ΟΛΗ τη γραμμή (νέα σειρά = διατηρεί grouping) */
+      aside .block .toplinks .chip-group{
+        display:flex; flex-wrap:wrap;
+        gap:8px;               /* ίδιο ΕΣΩΤΕΡΙΚΟ κενό για Cretinus & New 1/2/3 */
+        margin:0 !important;    /* κόψε ό,τι extra margin έχει μείνει από πριν */
+        flex-basis:100%;        /* κάθε group σε δική του γραμμή */
+      }
+
+
+      /* Aedes Cretinus group (το πρώτο chip-group): κεντραρισμένο */
+      aside .block .toplinks .chip-group:first-of-type{
+        justify-content: center;
+      }
+
+      /* New 1/2/3 group: οριζόντια σειρά με ίσες αποστάσεις */
+      aside .block .toplinks .chip-group + .chip-group{
+        justify-content: flex-start;  /* βάλ’ το center αν το θες κεντραρισμένο */
+      }
+
+      /* Όλα μικρά */
+      aside .block .toplinks .chip{
+        font-size: 12px;
+        padding: 4px 10px;
+        min-height: 28px;
+        border-radius: 10px;
+        line-height: 1.2;
+        font-weight: 450;
+      }
+      /* ίδια μεγέθη για τα “μεγάλα” (Cretinus & New 1/2/3) */
+      aside .block .toplinks .main-chip,
+      aside .block .toplinks .chip--lg{
+        font-size:14px; padding:8px 14px; min-height:36px; font-weight:500;
+      }
+
+      aside .block .toplinks .chip {
+        border: 1.75px solid rgba(42, 138, 160, 0.42);   /* απαλό μόνιμο περίγραμμα */
+        background: #0e182dcc;
+        color: var(--text);
+        padding: 4px 10px;
+        border-radius: 10px;
+        font-size: 14px;
+        line-height: 1.25;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height:28px;
+        text-decoration: none;
+        box-shadow: 0 0 6px rgba(101, 7, 135, 0.25);  /* διακριτικό μόνιμο glow */
+        transition:
+          border-color .18s ease,
+          background-color .18s ease,
+          box-shadow .18s ease,
+          transform .12s ease;
+      }
+      aside .toplinks .chip:hover,
+      aside .toplinks .chip:focus-visible,
+      .contact a:hover,
+      .contact a:focus-visible {
+        border-color: rgba(17, 31, 176, 0.6);
+        background: rgba(14, 91, 124, 0.6);   /* πιο απαλό */
+        box-shadow: 0 0 6px rgba(25, 117, 156, 0.75),
+                    0 0 14px rgba(27, 139, 187, 0.65); /* πολύ πιο διακριτικό */
+        transform: none;  /* βγάζεις το “πέταγμα” */
+        transition: box-shadow .18s ease, background .18s ease, border-color .18s ease;
+      }
+      .chip-group{
+        width:100%;
+        display:flex;
+        flex-direction:column;
+        gap:6px;
+        margin-top:6px;
+      }
+      .chip.main-chip{
+        font-weight:700;
+        border-color:#38bdf8;
+        background:rgba(56,189,248,.10);
+      }
+      
+      
+      /* Γραμμή διαχωρισμού */
+      aside .sep{
+        height: 1px;
+        background: #21cfc3;
+        margin: 8px 0 4px;          /* πιο μικρό κενό επάνω */
+      }
+
+      /* Το block Quick Navigation πιο κοντά στη γραμμή */
+      aside .sep + .block{
+        padding-top: 2px;          /* από 1rem (~16px) -> 6px */
+        margin-top: 0;             /* μηδενίζουμε το extra κενό */
+      }
+      /* Ο τίτλος να μην ξανανοίγει κενό */
+      aside .sep + .block h3{
+        margin: 0 0 6px;           /* από 1rem -> 6px */
+      }
+      /* ===== Sidebar Footnote ===== */
+      aside footer{
+        margin-top: auto;
+        padding-top: 11px;
+        color: #98a2b3;
+        font-size: 12.5px;
+        letter-spacing: 0.2px;
+        opacity: .85;
+        border-top: none;
+        text-align: left;
+      }
+      aside footer:hover{
+        opacity: 1;
+      }
+
+    </style>
+    </head>
+    <body>
+
+     
+
+      <div class="page">
+
+        <div class="ui-chrome">
+          <i></i><i></i><i></i>
+        </div>
+
+        <div class="layout">
+          <!-- Sidebar -->
+          <aside>
+            <h1 class="name">Chrisanthos Lymperopoulos</h1>
+            <p class="role"></p>
+
+            <div class="block">
+              <h3>Contact</h3>
+              <div class="contact">
+                <a href="mailto:118072@aua.gr">
+                  <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2zm0 2v.01L12 13 20 6.01V6H4z"/></svg>
+                  <span>118072@aua.gr</span>
+                </a>
+                <a href="https://www.researchgate.net/profile/Chrisanthos-Lymperopoulos" target="_blank" rel="noopener">
+                  <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/5/5e/ResearchGate_icon_SVG.svg" alt="ResearchGate logo" />
+                  <span>ResearchGate</span>
+                </a>
+                <a href="https://www.linkedin.com/in/chrisanthos-lymperopoulos-77a2b9260/" target="_blank" rel="noopener">
+                  <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.95v5.66H9.35V9h3.42v1.56h.05c.48-.9 1.66-1.85 3.43-1.85 3.67 0 4.35 2.42 4.35 5.56v6.18zM5.34 7.44a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45z"/></svg>
+                  <span>LinkedIn</span>
+                </a>
+                <a href="https://github.com/Chrisanthosss" target="_blank" rel="noopener">
+                  <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.2.8-.6v-2c-3.3.7-4-1.4-4-1.4-.6-1.5-1.5-1.9-1.5-1.9-1.2-.8.1-.8.1-.8 1.3.1 2 .1 2 .1 1.1 2 2.9 1.4 3.6 1.1.1-.8.5-1.4.8-1.7-2.7-.3-5.6-1.4-5.6-6.2 0-1.4.5-2.5 1.3-3.4-.1-.3-.6-1.7.1-3.6 0 0 1.1-.4 3.5 1.3a12 12 0 0 1 6.4 0c2.4-1.7 3.5-1.3 3.5-1.3.7 1.9.3 3.3.1 3.6.8.9 1.3 2 1.3 3.4 0 4.8-2.9 5.9-5.7 6.2.4.4.8 1.1.8 2.3v3.4c0 .4.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>
+                  <span>@Chrisanthosss</span>
+                </a>
+                <a href="https://orcid.org/0009-0007-8274-1871" target="_blank" rel="noopener" class="orcid-link">
+                <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/0/06/ORCID_iD.svg" alt="ORCID logo" />
+                <span>ORCID NUMBER</span>
+                </a>
+              </div>
+              </div>
+              <div class="sep"></div>
+
+              <!-- Quick Navigation -->
+              <div class="block">
+                <h3>Quick Navigation</h3>
+                <div class="toplinks" role="navigation" aria-label="Quick navigation">
+                  <a class="chip" href="#about">About</a> 
+                  <a class="chip" href="#education">Education</a>
+                  <a class="chip" href="#publications">Publications</a>
+                  <a class="chip" href="#conferences">Conferences</a>
+                  <a class="chip" href="#current-plans">Current Plans</a>
+
+                  <div class="chip-group">
+                    <a class="chip main-chip" href="#aedes">🦟 Aedes Cretinus</a>
+                  </div>
+
+                  <div class="chip-group">
+                  <a class="chip main-chip" href="#new-1">New 1</a>
+                  <a class="chip main-chip" href="#new-2">New 2</a>
+                  <a class="chip main-chip" href="#new-3">New 3</a>
+                  </div>
+                </div>
+              </div><!-- /.block -->
+
+              <footer>© <span id="y"></span> Chrisanthos Lymperopoulos</footer>
+              </aside>
+
+
+              <div>
+                <main>
+                    <section id="about">
+                      <h2>About</h2>
+                      <p>
+                        I hold a degree from the Agricultural University of Athens, where my thesis in
+                        <strong>mosquito ecology</strong> allowed me to connect agricultural and entomological
+                        experiments with my passion for mathematics. This combination sparked my curiosity for
+                        <strong>ecological modeling</strong>, as a way to extend experimental findings into quantitative
+                        frameworks for understanding biological systems. I do not aim to become strictly an entomologist
+                        or a statistician; rather, I see myself as someone closer to the role of an ecologist,
+                        using advanced quantitative and computational tools to uncover and interpret ecological phenomena.
+                      </p>
+                      <p>
+                        Recently, I will begin the <strong>MSc in Statistics (2025–2026)</strong>, with courses such as
+                        Computational Statistics, Generalized Linear Models,Statistical Machine Learning,
+                        Bayesian Models in Statistics, and Applied Stochastic Modeling.
+                        These studies are not an end in themselves, but a step that brings me closer to my real interest:
+                        <strong>ecological modeling</strong>. I want to develop skills in Python-based simulation,
+                        mathematical biology, and advanced modeling approaches that I consider essential
+                        for exploring ecological systems.
+                      </p>
+
+                      <p>
+                        Because mosquitoes are <strong>vectors</strong> of major epidemiological importance,
+                        my <strong>interest in <strong></strong>ecological modeling</strong> has also led me to develop a strong interest in
+                        <strong>biostatistics</strong> and <strong>epidemiological models</strong> as alternative directions for exploring public health.
+                        In addition, I remain open to potential applications in <strong>clinical research</strong>, where quantitative methods
+                        provide valuable insights into medical and epidemiological questions.
+                      </p>
+                    </section>
+
+                    <section id="education">
+                      <h2>Education</h2>
+                      <p>
+                        I completed my undergraduate studies at the Agricultural University of Athens, Department of Crop Science.
+                        My thesis focused on mosquito ecology with a particular emphasis on Aedes species.
+                      </p>
+                      <img src="Photos/AUA_transparent.gif" alt="University logo"
+                          style="max-width:120px; height:auto; display:block; margin:16px auto;">
+                      <p style="text-align:center; font-size:14px; color:#94a3b8; margin-top:8px;">
+                        Agricultural University of Athens, Department of Crop Science
+                      </p>
+                    </section>
+
+                    <section id="publications">
+                      <h2 style="margin-bottom:16px;">Publications</h2>
+                      <div class="grid">
+                        <div class="card">
+                          <p class="pub-title">
+                          “Overwintering survival of adults of <em>Aedes albopictus</em> and
+                          <em>Aedes cretinus</em> (Diptera: Culicidae) in a sheltered microclimate
+                          in northern Attica, Greece.”
+                          </p>
+                          <p class="pub-authors">
+                          <strong>
+                          Giatropoulos, A.<sup>†</sup>, Lymperopoulos, C.<sup>†</sup>, Kioulos, I.,
+                          Michaelakis, A., Balatsos, G., Papachristos, D., &amp; Koliopoulos, G. <sup>*</sup>
+                          </strong>
+                          </p>
+                          <p class="pub-meta">
+                            <sup>†</sup> Equal first authorship &nbsp; | &nbsp; <sup>*</sup> Corresponding author
+                          </p>
+                          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px">
+                            <a href="https://www.eje.cz/artkey/eje-202501-0020_overwintering-survival-of-adults-of-aedes-albopictus-and-aedes-cretinus-diptera-culicidae-in-a-sheltered-mic.php"
+                              target="_blank" rel="noopener">
+                              <img src="https://img.shields.io/badge/Published%20in-EJE-E30613" alt="Published in EJE">
+                              </a>
+                          </div>
+                        </div><!-- /card -->
+                      </div><!-- /grid -->
+                    </section>
+
+                    <section id="conferences">
+                    <h2>Conferences</h2>
+                    <div class="grid">
+                      <div class="card" style="text-align:left">
+                        <div class="badges">
+                          
+                          <!-- Badge Conference 1 -->
+                          <a href="Confe/conf1.pdf" target="_blank" rel="noopener">
+                            <img src="https://img.shields.io/badge/Conference%201-IECE-32CD32?style=flat" alt="Conference 1 IECE">
+                          </a>
+
+                          <!-- Badge Conference 2 -->
+                          <a href="Confe/conf2.pdf" target="_blank" rel="noopener">
+                            <img src="https://img.shields.io/badge/Conference%202-IECE-32CD32?style=flat" alt="Conference 2 IECE">
+                          </a>
+
+                        </div>
+                      </div>
+                    </div>
+                    </section>
+
+
+                    <section id="current-plans">
+                      <h2>Current Plans</h2>
+                      <p>
+                        My plan&mdash;if it works out&mdash;is to connect my MSc thesis to mosquito datasets.
+                        In parallel, I’d like to work with biostatistics and data from clinical studies,
+                        including biostatistical collaborations with clinical research organizations (CROs)
+                        as a complementary direction.
+                      </p>
+                    </section>
+
+                        <!-- =========================
+                        AEdes cretinus — FULL MODULE
+                        ========================= -->
+                    <section id="aedes">
+                      <h2>Aedes Cretinus</h2>
+
+                        <header>
+                          <h4><strong><em>Aedes</em></strong> (Stegomyia) <strong>cretinus</strong>, Edwards 1921</h4>
+                        </header>
+
+                        <div class="cre-pair">
+                          <figure>
+                            <img src="Photos/Cre.1.png" alt="Aedes cretinus female" class="cre-img-large" />
+                            <figcaption>© Marios Philippou, (JSHU)</figcaption>
+                          </figure>
+
+                          <figure>
+                            <img src="Photos/Cre.2.png" alt="Aedes cretinus female (lower resolution)" class="cre-img-small" />
+                            <figcaption>© Giatropoulos et al. 2024, EJE</figcaption>
+                          </figure>
+                        </div>
+
+                        <p class="cre-title">
+                          Both images represent females of <em><strong>Aedes</strong></em> (Stegomyia) <strong><em>cretinus</em></strong> native species.
+                        </p>
+                      
+                    <section id="new-findings" class="section">
+                      <h2 class="nf-title">New Findings in <em>Aedes cretinus</em> Ecology !!!</h2>
+                      <ol>
+                        <li>The better overwinter survival of <em>Aedes cretinus</em> adults may explain aspects of the ecology of the two species, especially in northern, colder and wooded areas, where <em>Ae. cretinus</em> seems to appear earlier.</li>
+                        <li>In this study, we investigated the overwintering capacity of <em>Ae. albopictus</em> and <em>Ae. cretinus</em> adults under semi-field, sheltered microclimatic conditions in northern Attica, Greece, during the winter of 2023–2024.</li>
+                        <li>Our findings revealed that 11% of <em>Ae. albopictus</em> females and 21.1% of <em>Ae. cretinus</em> females were capable of overwintering, highlighting the importance of sheltered microclimates for survival under low outdoor temperatures.</li>
+                        <li>In contrast, males of both species failed to overwinter.</li>
+                        <li>The winter survival ability of adults was significantly greater in <em>Ae. cretinus</em> than in <em>Ae. albopictus</em>.</li>
+                        <li>Nevertheless, the ability of <em>Ae. albopictus</em> females to also overwinter under the same sheltered conditions may affect the potential for interspecific competition in these areas.</li>
+                      </ol>
+                    </section>
+
+                    <!-- Υπόλοιπες υποενότητες χωρίς card -->
+                    <section id="general" class="section">
+                      <h2>📌 General</h2>
+                      <ul>
+                        <li>Black-and-white striped tree-hole mosquito.</li>
+                        <li>First described in 1921 (Crete, Greece – Amari, Rethymno) by Edwards.</li>
+                        <li>Named <em>cretinus</em> after Crete (Latin: <em>Creta</em>).</li>
+                        <li>Considered the “Mediterranean representative” of <em>Aedes albopictus</em> due to morphological similarities.</li>
+                        li>Member of subgenus <em>Stegomyia</em>, closely related to the invasive <em>Ae. albopictus</em>.</li>
+                      </ul>
+                    </section>
+
+                    <section id="distribution" class="section">
+                        <h2>🌍 Geographic Distribution</h2>
+                        <ul>
+                          <li>Native to Greece, also reported in Cyprus, Turkey, Georgia, and Lebanon.</li>
+                          <li>Primarily found in vegetated, wooded, and rural habitats within urban, peri-urban, and countryside settings.</li>
+                        </ul>
+                    </section>
+
+                    <section id="differences" class="section">
+                      <h2>🧬 The Three Basic Differences (<em>Ae. cretinus</em> vs. <em>Ae. albopictus</em>)</h2>
+                      <ul>
+                        <li><strong>Dorsal scutum line</strong>
+                          <ul>
+                            <li><em>Ae. cretinus</em>: white median + 2 submedian lines (clear, halfway down).</li>
+                            <li><em>Ae. albopictus</em>: submedian lines very short &amp; faint.</li>
+                          </ul>
+                        </li>
+                        <li><strong>Lateral scutum pattern</strong>
+                          <ul>
+                            <li><em>Ae. cretinus</em>: continuous white lateral line.</li>
+                            <li><em>Ae. albopictus</em>: all black scales in that area.</li>
+                          </ul>
+                        </li>
+                        <li><strong>Tarsal claws</strong>
+                          <ul>
+                            <li><em>Ae. cretinus</em>: toothed claws (fore &amp; mid legs).</li>
+                            <li><em>Ae. albopictus</em>: simple, untoothed claws.</li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </section>
+
+                    <section id="biology" class="section">
+                      <h2>🦟 Biology &amp; Ecology</h2>
+                      <ul>
+                        <li>Anthropophilic (feeds on humans), aggressive daytime biter.</li>
+                        <li>Exophagic &amp; exophilic – bites and rests mostly outdoors.</li>
+                        <li>Breeding sites include:
+                          <ul>
+                            <li>Tree holes, ground pools, potholes.</li>
+                            <li>Flowerpots, dishes, barrels.</li>
+                            <li>Road drains, used tires.</li>
+                          </ul>
+                        </li>
+                        <li>In Greece, larvae often collected from small natural or artificial containers.</li>
+                        <li>Documented in shaded areas (Russia), woods/fields/road edges (Turkey), semi-urban vegetated sites (Greece), and restaurant yards (Cyprus).</li>
+                      </ul>
+                    </section>
+
+                    <section id="activity" class="section">
+                      <h2>🕑 Activity (old data before <em>Ae. albopictus</em> established in Greece)</h2>
+                      <ul>
+                        <li>Reported biting from spring to autumn.</li>
+                        <li>Oviposition observed from early spring through summer–early autumn.</li>
+                        <li>Activity observed for about 9 months of the year.</li>
+                      </ul>
+                    </section>
+
+                    <section id="medical" class="section">
+                      <h2>🧪 Medical Importance</h2>
+                      <ul>
+                        <li>Current vector competence unknown.</li>
+                        <li>No confirmed evidence of pathogen transmission.</li>
+                        <li>Still considered of potential concern due to its close relation to <em>Ae. albopictus</em>.</li>
+                      </ul>
+                    </section>
+
+                    <section id="competition" class="section">
+                      <h2>⚔️ Competition with <em>Aedes albopictus</em></h2>
+                      <ul>
+                        <li>Populations of <em>Ae. cretinus</em> declined sharply in Greece after the invasion of <em>Ae. albopictus</em>.</li>
+                        <li>In Attica, <em>Ae. cretinus</em> was widespread before 2008, but became scarce after <em>Ae. albopictus</em> established.</li>
+                        <li>Laboratory studies show <em>Ae. albopictus</em> has a competitive advantage (cross-mating, larval competition).</li>
+                      </ul>
+                    </section>
+
+                    <section id="records" class="section">
+                      <h2>🇬🇷 Historical Records in Greece according to surveys</h2>
+                      <ul>
+                        <li><strong>1921</strong> – First description in Crete (Edwards).</li>
+                        <li><strong>1990s</strong> – Found in northern Attica, biting aggressively outdoors.</li>
+                        <li><strong>2000–2002</strong> – Oviposition activity in Attica (March–December).</li>
+                        <li><strong>2003–2004</strong> – <em>Ae. albopictus</em> first reported in Greece (Corfu).</li>
+                        <li><strong>2004–2005</strong> – <em>Ae. cretinus</em> detected in Attica (Pallini, Kifissia, Athens), Evia and Crete.</li>
+                        <li><strong>2007–2008</strong> – <em>Ae. cretinus</em> reported in vegetated streamside areas in Attica.</li>
+                        <li><strong>2008</strong> – <em>Ae. albopictus</em> detected for the first time in Athens; <em>Ae. cretinus</em> populations begin to decline.</li>
+                        <li><strong>2009–2011</strong> – <em>Ae. cretinus</em> still present in Attica (mainly vegetated areas) and also reported in Crete, Macedonia and Peloponnese via citizen samples, but much lower than <em>Ae. albopictus</em>.</li>
+                        <li><strong>2010s</strong> – Rarely recorded in Attica; largely absent from intensive surveys, showing displacement by <em>Ae. albopictus</em>.</li>
+                        <li><strong>2014–2018</strong> – Extensive LIFE CONOPS surveillance in Attica (BG-sentinel and oviposition traps) found no <em>Ae. cretinus</em>.</li>
+                        <li><strong>2017–2020</strong> – Crete (Chania & Rethymno): detections from citizens and traps, very low densities.</li>
+                        <li><strong>2018</strong> – Leros (Dodecanese): few eggs detected in oviposition traps.</li>
+                        <li><strong>2021–2023</strong> – Sporadic detections again in Attica (Melissia – Penteli, Afidnes – Oropos, Vravrona – Markopoulo).</li>
+                        <li><strong>2023</strong> – Preveza (Western Greece): citizen report via Mosquito Alert.</li>
+
+                      </ul>
+                    </section>
+
+                    <section id="attica" class="section">
+                      <h2>🦟 <em>Aedes cretinus</em> in Attica (2021–2022)</h2>
+                      <ul>
+                        <li>Detected during a two-year survey, alongside other <em>Aedes</em> species.</li>
+                        <li>Found in only a few locations, at very low densities compared to <em>Ae. albopictus</em>.</li>
+                        <li>Classified among the less common species in Attica.</li>
+                      </ul>
+                    </section>
+
+                    <section id="other-info" class="section">
+                      <h2>ℹ️ Other Information</h2>
+                      <ul>
+                        <li><em>Ae. cretinus</em> present in Greece &amp; Turkey since the 1990s.</li>
+                        <li>Seasonal activity (approx. summarize from 3 studies): April–September, peak June–August.</li>
+                        <li>Before 2003 (Greece) and 2011 (Turkey), often recorded without <em>albopictus</em>.</li>
+                      </ul>
+                    </section>
+
+                    <section id="turkiye" class="section">
+                      <h2>🇹🇷 <em>Aedes cretinus</em> in Türkiye 2012-2021 long mosquito survey</h2>
+                      <ul>
+                        <li>First records: Antalya (1980s–2000).</li>
+                        <li>New study (2012–2021): Found in Mediterranean, Aegean &amp; Marmara regions.</li>
+                        <li>Confirmed provinces: Osmaniye, Adana, Mersin, Antalya, Muğla, İzmir, Manisa, etc.</li>
+                        <li>Breeding sites: tree holes (plane, oak, walnut, cedar) + small containers &amp; tyres.</li>
+                        <li>Seasonality: Active May–September.</li>
+                      </ul>
+                    </section>
+
+                    <section id="belek" class="section">
+                      <h2>📍 <em>Ae. cretinus</em> in Belek–Turkey 1997 study</h2>
+                      <ul>
+                        <li>10.7% of total catch.</li>
+                        <li>Season: Active May–June, disappears after July.</li>
+                        <li>Activity: Peaks evening (18:00–22:00) + midnight (24:00–02:00).</li>
+                      </ul>
+                    </section>
+
+                    <section id="conservation" class="section">
+                      <h2>📉 Conservation &amp; Monitoring</h2>
+                      <ul>
+                        <li>Outcompeted by <em>Ae. albopictus</em> in overlapping habitats.</li>
+                        <li>Continuous surveillance needed to assess persistence in Greece.</li>
+                      </ul>
+                    </section>
+
+                    <section id="female-morphology" class="section">
+                      <h2>♀ Female Morphology</h2>
+                      <ul>
+
+                      <li>Proboscis:
+                        <ul>
+                          <li>Completely dark-scaled.</li>
+                        </ul>
+                      </li>
+
+                      <li>Palps:
+                        <ul>
+                          <li>About ¼ the length of the proboscis.</li>
+                          <li>Whitish scales dorsally on the apical half.</li>
+                          <li>Dark scales ventrally.</li>
+                        </ul>
+                      </li>
+
+                      <li>Head:
+                        <ul>
+                          <li>Clypeus bare.</li>
+                          <li>Pedicel with anterior white scales.</li>
+                          <li>Vertex with a broad median stripe of broad white scales.</li>
+                          <li>Occiput with a lateral stripe of broad white scales and extensive broad white scaling below.</li>
+                          <li>All dark scales are broad and flat.</li>
+                          <li>Eye margin with narrow white scales.</li>
+                          <li>Erect forked scales are dark.</li>
+                        </ul>
+                      </li>
+
+                      <li>Scutum:
+                        <ul>
+                          <li>Narrow dark scales overall.</li>
+                          <li>White acrostichal stripe extending from anterior margin to prescutellar area, forking and ending just before the scutellum.</li>
+                          <li>Narrow dorsocentral white stripes on posterior scutum.</li>
+                          <li>Lateral prescutal stripe of narrow white scales reaching the scutal angle.</li>
+                          <li>After a minute break it continues with broad white scales.</li>
+                          <li>Terminates with a few narrow white scales just before the margin of the lateral lobes of the scutellum.</li>
+                        </ul>
+                      </li>
+
+                      <li>Scutellum:
+                        <ul>
+                          <li>Broad white scales on all lobes.</li>
+                          <li>Small apical dark patch on the mid-lobe.</li>
+                        </ul>
+                      </li>
+
+                      <li>Pronotum &amp; pleura:
+                        <ul>
+                          <li>Ante- and postpronotum largely covered with broad white scales.</li>
+                          <li>Pleurites with several patches of broad white scales, some very densely scaled.</li>
+                        </ul>
+                      </li>
+
+                      <li>Wings:
+                        <ul>
+                          <li>Dark-scaled with a conspicuous pale basal spot on the costa.</li>
+                        </ul>
+                      </li>
+
+                      <li>Legs:
+                        <ul>
+                          <li>Foreleg: Fore femur anteriorly with sparse white basal scales on the basal half + small white knee spot; posteriorly white; tibia dark; tarsomeres I–II with basal white rings, III–V dark.</li>
+                          <li>Midleg: Femur dark anteriorly except for a few white scales at the base + conspicuous white knee spot; tibia dark; tarsomeres I–II with basal white rings, III–V dark.</li>
+                          <li>Hindleg: Femur anteriorly white almost to the apex + conspicuous white knee spot; tibia dark; tarsomeres I–III with basal white rings, IV with an extreme dark tip, V white.</li>
+                        </ul>
+                      </li>
+
+                      <li>Abdomen:
+                        <ul>
+                          <li>Terga II–IV with narrow white basal bands, slightly constricted in the middle and not connected to the broad lateral white patches.</li>
+                          <li>Sterna II–IV largely white-scaled; sterna V–VII with basal white bands.</li>
+                        </ul>
+                      </li>
+                        </ul>
+                    </section>
+
+                    <section id="contributors" class="section">
+                      <h2>📚 Greek Major Contributions to the Research of Aedes cretinus</h2>
+                      <ul>
+                        <li><strong>Dr Athanasios Giatropoulos</strong> – Agronomist-Entomologist, Researcher</li>
+                        <li><strong>Dr Ilias Kioulos</strong> – Agronomist-Field Based Entomologist</li>
+                        <li><strong>Professor Georgios Koliopoulos</strong>– Medical and Veterinary Entomology</li>
+                        <li><strong>Dr Angeliki (Kelly) Martinou</strong> – Ecologist, Principal Investigator</li>
+                        <li><strong>Dr Antonios Michaelakis</strong> – Head Research Scientist</li>
+                        <li><strong>Professor Eleni Patsoula</strong> – Parasitology, Entomology &amp; Public Health</li>
+                        <li><strong>Dr Anna Samanidou-Voyadjoglou (1946–2009)</strong> – Senior Lecturer</li>
+                      </ul>
+                    </section>
+
+                    <section id="papers" class="section">
+                      <h2>📑 Papers related to <em>Ae. cretinus</em></h2>
+                      <ul>
+                      <li>Caglar S.S., Alten B., Bellini R., Simsek F.M. & Kaynas S. (2003): Comparison of nocturnal activities of mosquitoes (Diptera: Culicidae) sampled by New Jersey light traps and CO2 traps in Belek, Turkey. J. Vector Ecol. 28: 12–22.</li>
+                      <li>Bisia M., Balatsos G., Sakellariou Sofianou M., Beleri S., Tegos N., Zavitsanou E., Karras V., Kollia D., Michaelakis A. & Patsoula E. (2025): Two-Year Entomological Survey of Mosquito Fauna in the Attica Region, Greece: Species Composition. Insects. 16: 406.</li>
+                      <li>Becker N., Petrić D., Zgomba M., Boase C., Madon M.B., Dahl C. & Kaiser A. (2020): Mosquitoes: Identification, Ecology and Control. Springer Nature, Cham, 570 pp. (pp. 264–265).</li>
+                      <li>Giatropoulos A., Michaelakis A., Koliopoulos G. & Pontikakos C.M. (2012b): Records of Aedes albopictus and Aedes cretinus (Diptera: Culicidae) in Greece from 2009 to 2011. Hell. Plant Prot. J. 5(2): 49–56.</li>
+                      <li>Giatropoulos A., Papachristos D.P., Koliopoulos G., Michaelakis A. & Emmanouel N. (2015): Asymmetric mating interference between two related mosquito species: Aedes (Stegomyia) albopictus and Aedes (Stegomyia) cretinus. PLoS One 10(5): e0127762.</li>
+                      <li>Giatropoulos A., Papachristos D., Michaelakis A., Kapranas A. & Emmanouel N. (2022): Laboratory study on larval competition between two related mosquito species: Aedes (Stegomyia) albopictus and Aedes (Stegomyia) cretinus. Acta Trop. 230: 106389.</li>
+                      <li>Kioulos I., Michaelakis A., Kioulos N., Samanidou-Voyadjoglou A. & Koliopoulos G. (2014): Mosquito (Diptera: Culicidae) fauna in natural breeding sites of Attica basin, Greece. Hell. Plant Prot. J. 7: 31–34.</li>
+                      <li>Martinou A.F., Vaux A.G.C., Bullivant G., Charilaou P., Hadjistyllis H., Shawcross K., Violaris M. & Medlock J. (2016): Rediscovery of Aedes cretinus (Edwards, 1921) (Diptera: Culicidae) in Cyprus, 66 years after the first and unique report. J. Eur. Mosq. Control Assoc. 34: 10–13.</li>
+                      <li>Martinou A.F., Fawcett J., Georgiou M., Angelidou I., Philippou M. & Schaffner F. (2021): Occurrence of Aedes cretinus in Cyprus based on information collected by citizen scientists. J. Eur. Mosq. Control Assoc. 39: 31–38.</li>
+                      <li>Patsoula E., Samanidou-Voyadjoglou A., Spanakos G., Kremastinou J., Nasioulas G. & Vakalis N.C. (2006): Molecular and morphological characterization of Aedes albopictus in northwestern Greece and differentiation from Aedes cretinus and Aedes aegypti. J. Med. Entomol. 43: 40–54.</li>
+                      <li>Giatropoulos A., Balatsos G., Lytra I., Karras V., Koliopoulos G., Papachristos D. & Michaelakis A. (2024): Records of Aedes (Stegomyia) cretinus in Greece before and after the invasion of Aedes (Stegomyia) albopictus (Diptera: Culicidae). Eur. J. Entomol. 121: 199–205.</li>
+                      <li>Şimşek F.M., Yavaşoğlu S.İ. (2023): Distribution of Aedes (Stegomyia) cretinus in Türkiye. Turkiye Parazitol Derg. 47(2): 117–123. doi:10.4274/tpd.galenos.2023.72692.</li>
+                    </ul>
+                      
+                    </section>
+                    <section id="disclaimer" class="section">
+                    <div class="warning-box">
+                      <span class="icon">⚠️</span>
+                      <span class="text"> «Disclaimer» — This section contains specialized information 
+                      compiled from multiple sources. Every possible effort has been made to ensure 
+                      accuracy and completeness; however, no guarantee is provided regarding the 
+                      orthographic, syntactic, or scientific integrity of the text. 
+                      The reader bears full responsibility for further verification and use of the content.</span>
+                    </div>
+                    <p class="muted">© <span id="y"></span> — Aedes cretinus 2025</p>
+                    </section>
+
+
+                      <!-- =========================
+                      NEW MODULES
+                      ========================= -->
+
+                    <section id="new-1">
+                      <h2> New 1</h2>
+                      <p>Type here...</p>
+                    </section>
+
+                    <section id="new-2">
+                    <h2> New 2</h2>
+                    <div class="grid">
+                      <div class="card">
+                        <div class="pub-entry">
+                          <p class="pub-title">Type here...</p>
+                          <p class="pub-authors"><strong>Type here...</strong></p>
+                          <p class="pub-meta">Type here...</p>
+                        </div>
+                      </div>
+                      <div class="card">
+                        <div class="pub-entry">
+                          <p class="pub-title">Type here...</p>
+                          <p class="pub-authors"><strong>Type here...</strong></p>
+                          <p class="pub-meta">Type here...</p>
+                        </div>
+                      </div>
+                    </div>
+                    </section>
+
+                    <section id="new-3">
+                      <h2> New 3</h2>
+                      <div class="grid">
+                        <div class="card">
+                          <p>Type here...</p>
+                        </div>
+                        <div class="card">
+                          <p>Type here...</p>
+                        </div>
+                      </div>
+                    </section>
+
+                    <!-- =========================
+                    CSS ΓΙΑ AEdes CRETINUS
+                    ========================= -->
+                    <style>
+                        /* Εικόνες */
+                        .cre-pair {
+                          display: flex;
+                          gap: var(--cre-gap);
+                          align-items: flex-end;
+                          }
+                          .cre-pair figure{ margin:0; padding:0; }
+                          .cre-pair figure:first-child{
+                          width: calc( (100% - var(--cre-gap)) * var(--cre-r) );
+                          }
+                          .cre-pair figure:last-child{
+                            width: calc( (100% - var(--cre-gap)) * (1 - var(--cre-r)) );
+                          }
+                          .cre-pair figure > img{
+                          display:block;
+                          width:100%;
+                          height:auto;
+                          border-radius:18px;         /* ή 18px 18px 0 0 για «λείες» μόνο πάνω */
+                          }
+
+                          :root {
+                            --cre-gap:20px;   
+                            --cre-r: .65;  
+                          }
+                          .cre-img-large { width: var(--cre-left, 400px); height: auto; }
+                          .cre-img-small { width: var(--cre-right, 320px); height: auto; }
+                          .cre-pair img{
+                            max-width: 100%;
+                            height: auto;
+                            border-radius: 18px; 
+                            display:block;
+                          }
+                          .cre-pair figcaption {
+                            margin-top: 6px;
+                            font-size: 0.9rem;
+                            text-align: center;
+                            color: #cbd5e1;
+                          }
+                          .cre-title {
+                            text-align: center;
+                            font-size: 1rem;
+                            font-weight: 500;
+                            margin-top: 30px;
+                            margin-bottom: 40px;
+                              }
+
+                          /* Subsections */
+                          .section {
+                            margin-top: 28px;
+                            margin-bottom: 28px;
+                            background: none;
+                            border: none;
+                            padding: 0;
+                            border-top: 3px dashed var(--border);  /* διαχωριστική γραμμή */
+                            padding-top: 18px;                     /* κενό μετά τη γραμμή */
+                          }
+                          .section:first-of-type {
+                            border-top: none;  /* το πρώτο να μην έχει γραμμή από πάνω */
+                          }
+
+                          :root {
+                            --cre-left: 450px;     /* αριστερή εικόνα */
+                            --cre-right: 300px;    /* δεξιά εικόνα */
+                            --cre-gap:20px;    
+                          }
+
+                          .cre-pair {
+                            display: flex;
+                            align-items: flex-end;
+                            gap: var(--cre-gap);
+                          }
+
+                          /* Αριστερή εικόνα = σταθερή */
+                          .cre-pair figure:first-child {
+                            margin-left: 5px; 
+                          }
+
+                          /* Δεξιά εικόνα = ρυθμιζόμενη */
+                          .cre-pair figure:last-child {
+                            margin-right: 5px;      
+                          }
+                          .cre-pair figure {
+                            margin: 0;
+                            padding: 0;
+                          }
+                          .cre-pair img {
+                            display: block;
+                          }
+
+                          /* Στρογγυλεμένες γωνίες */
+                          .cre-pair img {
+                            border-radius: 18px;
+                            display: block;
+                          }
+
+                          /* Μεγέθη */
+                          .cre-img-large { width: var(--cre-left); }
+                          .cre-img-small { width: var(--cre-right); }
+                          .cre-pair{ gap: var(--cre-gap); }
+
+                          .chip-group {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 6px;
+                            margin-top: 8px;
+                          }
+
+                          .subchips {
+                            display: grid;
+                            gap: 6px;
+                            margin-left: 16px; /* εσοχή υπο-μενού */
+                          }
+
+                          .main-chip {
+                            font-weight: bold;
+                            background: #1e293bcc;
+                          }
+                          main h2 {
+                            font-size: 22px;     /* same as now, or adjust */
+                            line-height: 1.35;   /* controls the “height” of the title */
+                            margin: 0 0 14px;    /* space below */
+                            font-weight: 650;    /* stronger than 600, lighter than bold */
+                          }
+
+                          .section h2 {
+                            font-size: 1.05rem;
+                            margin-bottom: 0px;
+                            color: #f9fdfd;
+                          }
+                          #aedes h4 {
+                            font-size: 1.05rem;      
+                            font-weight: 250;     
+                            margin: 25px 0 40px;       
+                            color: #f9fdfd;       
+                            text-align: left;   
+                          }
+                          /* ===== ΒΙΒΛΙΟΓΡΑΦΙΕΣ (#papers) ===== */
+                          #papers h2 {
+                            font-size: 18px;          /* λίγο μικρότερος τίτλος */
+                            line-height: 1.25;
+                            margin-bottom: 10px;
+                            text-align: left;         /* τίτλος αριστερά */
+                          }
+
+                          #papers ul {
+                            margin-left: 0;           /* κόψε τα μεγάλα κενά */
+                            padding-left: 18px;       /* μικρή εσοχή για αριθμημένα refs */
+                            list-style-position: outside;
+                            list-style-type: decimal; /* αριθμημένη λίστα */
+                          }
+
+                          #papers ul li {
+                            font-size: 12px;          /* μικρά, καθαρά γράμματα */
+                            line-height: 1.35;        /* σφιχτό διάστιχο */
+                            margin-bottom: 7px;       /* μικρό κενό ΜΕΤΑΞΥ refs */
+                            text-align: left;         /* όλα αριστερά */
+                            color: #d1d5db;           /* απαλό γκρι */
+                          }
+
+                          #papers ul li:last-child {
+                            margin-bottom: -4px;  /* μικρό κενό μόνο στην τελευταία */
+                          }
+
+                          #new-findings .nf-title {
+                            display: flex;                /* inline-flex για σωστό wrapping */
+                            align-items: center;                 
+                            justify-content: center;             
+                            gap: 0.35ch;                         
+                            color: rgba(255, 0, 0, 0.9);         /* YouTube Red */
+                            font-weight: 800;                    
+                            font-size: clamp(1.2rem, 1.4vw + 0.4rem, 1.6rem); 
+                            line-height: 1.2;                    
+                            margin-top: -1rem;                   
+                            margin-bottom: 2rem;               
+                            text-align: center; 
+                            white-space: normal;                 
+                            flex-wrap: wrap;                     
+                          }
+
+                          /* Εισαγωγικά */
+
+                          #conferences .badges a {text-decoration: none !important;}
+
+                          #new-findings .nf-title::before,
+                          #new-findings .nf-title::after {
+                            font-size: 1.6em;   /* πάντα ευδιάκριτα */
+                            line-height: 1;
+                            position: relative;
+                            top: -0.02em;        /* μικρή ευθυγράμμιση */
+                            color: rgba(255, 0, 0, 0.85); 
+                          }
+
+                          #new-findings .nf-title::before {
+                            content: "«";
+                            margin-right: 0.25ch;
+                          }
+
+                          #new-findings .nf-title::after {
+                            content: "»";
+                            margin-left: 0.25ch;
+                          }
+
+                          aside .block:first-of-type > h3{
+                              position: relative;
+                              top: -2px;                          /* σήκωσέ το ελαφρά */
+                              font-size: calc(13.5px - 0.5px);    
+                              text-transform: uppercase;
+                              letter-spacing: .6px;
+                            }
+                          
+
+                          /* === DISCLAIMER (Desktop clean) === */
+                          #disclaimer.section {
+                            margin-top: 10px;
+                            margin-bottom: 12px;
+                            padding: 12px 14px;
+                            border: 1.6px dashed rgba(153,161,162,0.7);  /* μόνο το εξωτερικό πλαίσιο */
+                            border-radius: 10px;
+                            background: rgba(14, 24, 45, 0.35);          /* απαλό σκούρο φόντο */
+                          }
+
+                          /* Κείμενο */
+                          #disclaimer .warning-box .text {
+                            font-size: 13px;
+                            line-height: 1.35;
+                            font-weight: 450;
+                            color: #dbe4f5;
+                            margin: 0;
+                            text-align: left;
+                          }
+
+                          /* Εικονίδιο */
+                          #disclaimer .warning-box .icon {
+                            font-size: 1.05em;
+                            margin-right: 6px;
+                            opacity: 0.95;
+                          }
+
+                          /* Αφαιρούμε την επιπλέον γραμμή μέσα */
+                          #disclaimer .warning-box .text::after {
+                            content: none;   /* καμία γραμμή μετά το κείμενο */
+                          }
+
+                          /* Footer tagline “Aedes cretinus 2025” */
+                          #disclaimer .muted {
+                            display: block;
+                            text-align: center;
+                            font-size: 13px;
+                            font-weight: 600;
+                            color: rgba(190,195,195,.92);
+                            margin: 8px 0 0;
+                            padding: 0;
+                            border: none;    /* χωρίς επιπλέον γραμμή */
+                          }
+                          /* === ΒΙΒΛΙΟΓΡΑΦΙΕΣ (#papers) — μικρότερα & σφιχτά === */
+
+                          #papers ul{
+                            margin-left: 0;
+                            padding-left: 0;
+                            list-style-position: inside;
+                            list-style-type: decimal;
+                          }
+                          /* Πιάνει ΚΑΙ όταν δεν υπάρχει <p> (σκέτο κείμενο στο <li>) */
+                          #papers ul li{
+                            font-size: 11px !important;      /* πιο μικρά γράμματα */
+                            line-height: 1.5 !important;   /* λεπτό διάστιχο μέσα στο ίδιο reference */
+                            margin-bottom: 5px !important;  /* κενό ΜΕΤΑΞΥ references */
+                          }
+                          /* Αν έχεις <p> μέσα στο li, κόψε επιπλέον κενά */
+                          #papers ul li p{ margin: 0 !important; }
+
+                          #disclaimer.section {
+                          margin-top: 2px !important;   /* πιο ψηλά η γραμμή */
+                          padding-top: 4px !important;    
+                          }
+                          /* FOOTNOTE (disclaimer) — σήκωσε την tagline και μάζεψε το κενό από πάνω */
+                          #disclaimer .warning-box,
+                          #disclaimer .warning-box p,
+                          #disclaimer .warning-box .text{
+                            font-size: 10px !important;
+                            line-height: 1.25 !important;    /* μειωμένο διάστιχο */
+                          }
+                          #disclaimer .warning-box p{ margin: 0 !important; }
+                          #disclaimer .warning-box p + p{ margin-top: 4px !important; }
+
+                          /* dashed γραμμή κάτω από το κείμενο: φέρε την πιο κοντά στην tagline */
+                          #disclaimer .warning-box .text::after{
+                            border-bottom: 1.5px dashed rgba(137,137,138,0.95);
+                            margin-top: 6px !important;
+                            margin-bottom: 6px !important;   /* ↓ μικρό κενό πριν την “Aedes…” */
+                          }
+
+                          /* 2) “— Aedes cretinus 2025 —” απόλυτα συμμετρικό με δύο ίσες γραμμές */
+                          /* Πρώτα ακυρώνουμε τυχόν παλιό border-top */
+
+                          #cretinus-footnote .tagline{ border: 0 !important; }
+
+                          /* Flex κεντράρισμα + ίσες dashed δεξιά/αριστερά */
+                          #disclaimer .muted,
+                          #cretinus-footnote .tagline{
+                            display: flex !important;
+                            align-items: center;
+                            justify-content: center;
+                            gap: .6ch;
+                            font-size: 10px!important;
+                            white-space: nowrap;
+                            margin-bottom: 0 !important;
+                            margin-top: 10px;
+                            padding: 2px 0 2px !important;   /* λεπτό, ισορροπημένο */
+                            }
+                          #disclaimer .muted::before,
+                          #disclaimer .muted::after,
+                          #cretinus-footnote .tagline::before,
+                          #cretinus-footnote .tagline::after{
+                            content: "";
+                            flex: 1 1 30%;                   /* ίσο μήκος αριστερά/δεξιά */
+                            max-width: 90px;                  /* ίδια “ουρά” και από τις 2 πλευρές */
+                          }
+                          #disclaimer .warning-box .icon {
+                            font-size: 1.2em;      /* πιο μεγάλο */
+                            font-weight: 700;      /* πιο χοντρό */
+                            opacity: 1;            /* πιο έντονο */
+                            transform: translateY(-1px); /* μικρή ευθυγράμμιση */
+                          }
+
+                          
+                         /* === Minimal top chrome (same color dots, subtle, near your bg) === */
+                          
+                         :root { --neon-sea:#02dde4; }  /* neon θαλασσί */
+
+                          .ui-chrome{
+                            position: static; top: 4px; z-index: 20;
+
+                            height: 34px;                 /* ↑ λίγο πιο ψηλή */
+                            padding: 0 12px;              /* ισορροπημένο εσωτερικό κενό */
+                            margin: 6px 0 2px;            /* ↓ ελάχιστα μικρότερο bottom gap */
+                            display:flex; align-items:center; gap:7px;
+
+                            background: rgba(15,23,42,.52);   /* κοντά στο bg, με λίγη διαφάνεια */
+                            border: 1px solid rgba(2,221,228,.55);  /* ΠΙΟ ΑΠΛΟ, λεπτό περίγραμμα */
+                            border-radius: 14px;
+                            box-shadow: 0 1px 4px rgba(0,0,0,.12);  /* πολύ διακριτική σκιά */
+                                                    }
+
+                          .ui-chrome i{
+                            width: 15px; height: 15px;              /* ↑ λίγο μεγαλύτερες τελίτσες */
+                            border-radius: 50%;
+                            background: rgba(148,163,184,.88);      /* muted, καθαρό */
+                            
+                          }
+
+
+                          /* Tablet+Mobile: σπάσιμο ζεύγους εικόνων Aedes όπως είχες */
+                          @media (max-width:1200px){
+                            #aedes .cre-pair{ flex-wrap:wrap; }
+                            #aedes .cre-img-large,
+                            #aedes .cre-img-small{ width:100% !important; }
+                          }
+
+                          /* === MASTER MOBILE (<=768px) — σεβασμός όλων των ρυθμίσεων σου === */
+                          @media (max-width:768px){
+
+                            /* Ασφάλεια & ομαλό scroll */
+                            html, body { overflow-x: hidden; }
+                            html{
+                              scroll-behavior: smooth;      /* anchors να πηγαίνουν ομαλά */
+                              scroll-padding-top: 10px;     /* μικρό offset στην κορυφή */
+                            }
+                            img, video, iframe { display:block; max-width:100%; height:auto; }
+
+                            /* Διάταξη: 2 στήλες -> 1 στήλη */
+                            .layout { display:block; }
+                            main { display:grid; gap:16px; max-width:100%; margin:0; padding:0; }
+                            section { padding:12px; border-radius:12px; }
+                            .grid { gap:12px; grid-template-columns:1fr; }
+
+                            /* Τίτλοι modules (About, Education, Publications, Conferences, Aedes) */
+                            main h2{
+                              font-size:14px !important;
+                              line-height:1.25 !important;
+                              margin:12px 0 10px !important;   /* ΠΡΟΣΟΧΗ: με px */
+                              font-weight:700;
+                              text-align:left;
+                            }
+
+                            /* Κείμενα σώματος */
+                            .name{
+                              font-size:22px !important;         /* όπως ζήτησες */
+                              letter-spacing:1.25px !important;
+                              line-height:1.3;
+                            }
+                            .role { font-size:12px; margin:0 0 10px; }
+
+                            /* ΜΟΝΟ οι παράγραφοι πλήρως στοιχισμένες (όχι οι τίτλοι) */
+                            section p{
+                              text-align: justify;
+                              hyphens: auto;
+                              -webkit-hyphens: auto;
+                              -ms-hyphens: auto;
+                            }
+                            /* Εξαιρέσεις: publications να μένουν αριστερά */
+                            .pub-title, .pub-authors, .pub-meta { text-align:left !important; }
+
+                            /* Sidebar */
+                            aside{
+                              position:static; top:auto;
+                              min-height:unset; height:auto;
+                              margin:8px 0 12px; padding:12px; border-radius:14px;
+                            }
+                            /* μπλε γραμμή */
+                            aside .sep {
+                              height: 1px !important;
+                              background: #21cfc3;
+                              margin: 6px 0 10px;
+                              opacity: .8;
+                            }
+                            /* Quick Navigation τίτλος & block */
+                            aside .sep + .block h3 {
+                              margin-bottom: 10px !important;     /* χώρος κάτω από “Quick Navigation” */
+                              text-align: center !important;
+                              font-weight: 650;
+                              font-size: 12.5px;
+                              letter-spacing: 0.6px;
+                              color: #b7bec8;
+                            }
+                            aside .block.toplinks { margin-bottom: 14px !important; }
+                            aside .toplinks { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+                            aside .toplinks .chip { padding:6px 10px; font-size:11.5px; border-radius:12px; }
+
+                            /* Contact */
+                            .contact { display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+                            .contact a { min-height:44px; padding:9px 10px; gap:8px; font-size:12px; border-radius:11px; }
+                            .contact a span { font-size:14px; line-height:1.2; }
+                            .icon { width:20px; height:20px; flex:0 0 20px; }
+
+                            /* Footer (© 2025 Chrisanthos Lymperopoulos) */
+                            aside footer{
+                              text-align:center !important;
+                              font-size:11px !important;
+                              letter-spacing:.25px !important;
+                              color:rgba(181,178,178,.94) !important;
+                              padding-top:6px !important;
+                              margin:3px 0 6px !important;
+                              opacity:.95;
+                            }
+
+                            /* Aedes — επιστημονική γραμμή */
+                            #aedes header h4{
+                              font-size:13px !important;
+                              line-height:1.3 !important;
+                              margin-top:17.5px !important;     /* όπως είχες */
+                              margin-bottom:35px !important;
+                              text-align:left;
+                              font-weight:250;
+                            }
+
+                            /* Aedes — ζεύγος εικόνων + captions */
+                            #aedes .cre-pair { flex-direction:column; align-items:center; gap:12px; margin-bottom:8px !important; }
+                            #aedes .cre-pair figure { width:75%; max-width:360px; margin:0 auto; }
+                            #aedes .cre-pair img { width:100%; height:auto; display:block; }
+                            #aedes figure figcaption {
+                              margin-top:6px !important;
+                              font-size:10px !important;
+                              line-height:1.25 !important;
+                              opacity:.85; text-align:center;
+                            }
+
+                            /* “Both images represent …” */
+                            #aedes .cre-title{
+                              font-size:12px !important;
+                              margin-top:28px !important;
+                              margin-bottom:16px !important;
+                              line-height:1.35 !important;
+                              text-align:center;
+                            }
+
+                            /* New Findings τίτλος πιο σφιχτός */
+                            #new-findings .nf-title{
+                              font-size:14px !important;
+                              line-height:1.3 !important;
+                              margin:0px 0 0px !important;      /* όπως είχες */
+                              text-align:center !important;
+                            }
+
+                            /* Υπο-ενότητες Aedes: κόψε “σκαλοπάτια” */
+                            #aedes .section{
+                              margin-top:10px !important;
+                              padding-top:12px !important;
+                              border-top-width:2px !important;
+                            }
+
+                            /* Conferences badges */
+                            #conferences .badges { display:flex; gap:6px; flex-wrap:wrap; }
+
+                            /* ΒΙΒΛΙΟΓΡΑΦΙΕΣ (journal look) */
+                            #papers ul{
+                              margin-left: 0;
+                              padding-left: 0;
+                              list-style-position: inside;
+                              list-style-type: decimal;
+                            }
+                            #papers ul li{
+                              font-size: 11px !important;         /* μικρότερα */
+                              line-height: 1.5 !important;         /* λεπτό διάστιχο στο ίδιο ref */
+                              margin-bottom: 5px !important;       /* κενό ΜΕΤΑΞΥ refs */
+                              text-align:left !important;
+                            }
+                            #papers ul li p{ margin:0 !important; }
+                            #papers ul li:last-child{ margin-bottom:2px !important; }  /* λιγότερο πριν το disclaimer */
+
+                            /* Disclaimer — όπως το είχες “μαζεμένο” στο mobile */
+                            #disclaimer.section {
+                              margin-top: 2px !important;      /* πιο ψηλά η γραμμή */
+                              padding-top: 4px !important;
+                            }
+                            #disclaimer .warning-box,
+                            #disclaimer .warning-box p,
+                            #disclaimer .warning-box .text{
+                              font-size: 10px !important;
+                              line-height: 1.25 !important;    /* μειωμένο διάστιχο */
+                            }
+                            #disclaimer .warning-box p{ margin: 0 !important; }
+                            #disclaimer .warning-box p + p{ margin-top: 4px !important; }
+                            #disclaimer .warning-box .text::after{
+                              content:"";
+                              display:block;
+                              border-bottom: 1.5px dashed rgba(137,137,138,0.95);
+                              margin-top: 6px !important;
+                              margin-bottom: 6px !important;
+                            }
+
+                            /* Tagline “— Aedes cretinus 2025 —” συμμετρικό */
+                            #cretinus-footnote .tagline{ border: 0 !important; }
+                            #disclaimer .muted,
+                            #cretinus-footnote .tagline{
+                              display: flex !important;
+                              align-items: center;
+                              justify-content: center;
+                              gap: .6ch;
+                              font-size: 10px!important;
+                              white-space: nowrap;
+                              margin-bottom: 0 !important;
+                              margin-top: 10px;
+                              padding: 2px 0 2px !important;
+                            }
+                            #disclaimer .muted::before,
+                            #disclaimer .muted::after,
+                            #cretinus-footnote .tagline::before,
+                            #cretinus-footnote .tagline::after{
+                              content: "";
+                              flex: 1 1 30%;
+                              max-width: 90px;
+                            }
+                            #disclaimer .warning-box .icon {
+                              font-size: 1.2em;
+                              font-weight: 700;
+                              opacity: 1;
+                              transform: translateY(-1px);
+                            }
+                          }
+                    </style>
+                  </main>
+                </div>
+              </div>
+
+              <script>
+                  document.getElementById('y').textContent = new Date().getFullYear();
+              </script>
+
+              <script>
+                document.addEventListener('click', function(e){
+                if (!window.matchMedia('(max-width:768px)').matches) return;
+                const a = e.target.closest('aside .toplinks a[href^="#"]');
+                if (!a) return;
+                const target = document.querySelector(a.getAttribute('href'));
+                if (!target) return;
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+              </script>
+
+
+    </body>
+</html>
